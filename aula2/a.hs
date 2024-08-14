@@ -74,6 +74,11 @@ _popLast [] acc = rev acc
 _popLast [x] acc = rev acc
 _popLast (x : xs) acc = _popLast xs (x : acc)
 
+intercala1 :: [a] -> [a] -> [a]
+intercala1 [] _ = []
+intercala1 _ [] = []
+intercala1 (x : xs) (y : ys) = x : y : intercala1 xs ys
+
 intercala2 :: [a] -> [a] -> [a]
 intercala2 xs ys = _intercala2 xs ys []
 
@@ -83,4 +88,4 @@ _intercala2 xs [] acc = acc ++ xs
 _intercala2 (x : xs) (y : ys) acc = _intercala2 xs ys (acc ++ [x, y])
 
 main = do
-  print (intercala2 [1,2,3] [4,5,6,7,8])
+  print (intercala1 [1,2,3] [4,5,6,7,8])
