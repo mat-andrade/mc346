@@ -63,12 +63,14 @@ _rev (x : xs) acc = _rev xs (x : acc)
 
 range2 :: (Eq a, Num a) => a -> [a]
 range2 n = _range2 n []
+
 _range2 :: (Eq a, Num a) => a -> [a] -> [a]
 _range2 0 acc = acc
 _range2 n acc = _range2 (n - 1) (n : acc)
 
 popLast :: [a] -> [a]
 popLast xs = _popLast xs []
+
 _popLast :: [a] -> [a] -> [a]
 _popLast [] acc = rev acc
 _popLast [x] acc = rev acc
@@ -87,5 +89,101 @@ _intercala2 [] ys acc = acc ++ ys
 _intercala2 xs [] acc = acc ++ xs
 _intercala2 (x : xs) (y : ys) acc = _intercala2 xs ys (acc ++ [x, y])
 
+isOrdered :: (Ord a) => [a] -> Bool
+isOrdered [] = True
+isOrdered [x] = True
+isOrdered (a : b : xs) = b >= a && isOrdered xs
+
+shiftr :: [a] -> [a]
+shiftr [] = []
+shiftr xs =
+  let h = head (rev xs)
+      t = popLast xs
+   in h : t
+
+shiftrn :: (Eq t, Num t) => t -> [a] -> [a]
+shiftrn 0 xs = xs
+shiftrn n xs = shiftrn (n - 1) (shiftr xs)
+
+shiftl :: [a] -> [a]
+shiftl [] = []
+shiftl (x : xs) = xs ++ [x]
+
+shiftln :: (Eq t, Num t) => t -> [a] -> [a]
+shiftln 0 xs = xs
+shiftln n xs = shiftln (n - 1) (shiftl xs)
+
+removeElementOnce :: (Eq a) => a -> [a] -> [a]
+removeElementOnce e xs = _removeElementOnce e xs []
+
+_removeElementOnce :: (Eq a) => a -> [a] -> [a] -> [a]
+_removeElementOnce _ [] acc = rev acc
+_removeElementOnce e (x : xs) acc =
+  if e == x
+    then
+      rev acc ++ xs
+    else
+      _removeElementOnce e xs (x : acc)
+
+removeElementN :: (Num t1, Eq t1, Eq t2) => t1 -> t2 -> [t2] -> [t2]
+removeElementN n e xs = _removeElementN n e xs []
+
+_removeElementN :: (Num t1, Eq t1, Eq t2) => t1 -> t2 -> [t2] -> [t2] -> [t2]
+_removeElementN _ _ [] acc = rev acc
+_removeElementN 0 _ xs acc = rev acc ++ xs
+_removeElementN n e (x : xs) acc =
+  if e == x
+    then
+      _removeElementN (n - 1) e xs acc
+    else
+      _removeElementN n e xs (x : acc)
+
+removeElementAll :: (Eq a) => a -> [a] -> [a]
+removeElementAll e xs = _removeElementAll e xs []
+
+_removeElementAll :: (Eq a) => a -> [a] -> [a] -> [a]
+_removeElementAll _ [] acc = rev acc
+_removeElementAll e (x : xs) acc =
+  if e == x
+    then
+      _removeElementAll e xs acc
+    else
+      _removeElementAll e xs (x : acc)
+
+removeElementLast :: (Eq a) => a -> [a] -> [a]
+removeElementLast e xs = rev (removeElementOnce e (rev xs))
+
+replaceElementOnce oe ne xs = _replaceElementOnce oe ne xs []
+_replaceElementOnce _ _ [] acc = rev acc
+_replaceElementOnce oe ne (x : xs) acc =
+  if x == oe then
+    rev acc ++ (ne : xs)
+  else
+    _replaceElementOnce oe ne xs (x : acc)
+
+replaceElementAll :: Eq a => a -> a -> [a] -> [a]
+replaceElementAll oe ne xs = _replaceElementAll oe ne xs []
+
+_replaceElementAll :: Eq a => a -> a -> [a] -> [a] -> [a]
+_replaceElementAll _ _ [] acc = rev acc
+_replaceElementAll oe ne (x : xs) acc =
+  if x == oe then
+    _replaceElementAll oe ne xs (ne : acc)
+  else
+    _replaceElementAll oe ne xs (x : acc)
+
+replaceElementN :: (Num t, Eq t, Eq a) => t -> a -> a -> [a] -> [a]
+replaceElementN n oe ne xs = _replaceElementN n oe ne xs []
+_replaceElementN :: (Num t, Eq t, Eq a) => t -> a -> a -> [a] -> [a] -> [a]
+_replaceElementN _ _ _ [] acc = rev acc
+_replaceElementN 0 _ _ xs acc = rev acc ++ xs
+_replaceElementN n oe ne (x : xs) acc =
+  if x == oe then
+    _replaceElementN (n - 1) oe ne xs (ne : acc)
+  else
+    _replaceElementN n oe ne xs (x : acc)
+
 main = do
-  print (intercala1 [1,2,3] [4,5,6,7,8])
+  -- [1,2,3,3,1]
+  -- print (_replaceElementAll 1 4 [3, 1] [3, 2, 4])
+  print (replaceElementN 3 0 4 [1,2,3,3,1])
