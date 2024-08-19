@@ -154,36 +154,48 @@ removeElementLast :: (Eq a) => a -> [a] -> [a]
 removeElementLast e xs = rev (removeElementOnce e (rev xs))
 
 replaceElementOnce oe ne xs = _replaceElementOnce oe ne xs []
+
 _replaceElementOnce _ _ [] acc = rev acc
 _replaceElementOnce oe ne (x : xs) acc =
-  if x == oe then
-    rev acc ++ (ne : xs)
-  else
-    _replaceElementOnce oe ne xs (x : acc)
+  if x == oe
+    then
+      rev acc ++ (ne : xs)
+    else
+      _replaceElementOnce oe ne xs (x : acc)
 
-replaceElementAll :: Eq a => a -> a -> [a] -> [a]
+replaceElementAll :: (Eq a) => a -> a -> [a] -> [a]
 replaceElementAll oe ne xs = _replaceElementAll oe ne xs []
 
-_replaceElementAll :: Eq a => a -> a -> [a] -> [a] -> [a]
+_replaceElementAll :: (Eq a) => a -> a -> [a] -> [a] -> [a]
 _replaceElementAll _ _ [] acc = rev acc
 _replaceElementAll oe ne (x : xs) acc =
-  if x == oe then
-    _replaceElementAll oe ne xs (ne : acc)
-  else
-    _replaceElementAll oe ne xs (x : acc)
+  if x == oe
+    then
+      _replaceElementAll oe ne xs (ne : acc)
+    else
+      _replaceElementAll oe ne xs (x : acc)
+
+removen :: (Num t1, Eq t1, Eq t2) => t2 -> t1 -> [t2] -> [t2]
+removen _ _ [] = []
+removen _ 0 xs = xs
+removen e n (x : xs)
+  | e == x = removen e (n - 1) xs
+  | otherwise = x : removen e n xs
 
 replaceElementN :: (Num t, Eq t, Eq a) => t -> a -> a -> [a] -> [a]
 replaceElementN n oe ne xs = _replaceElementN n oe ne xs []
+
 _replaceElementN :: (Num t, Eq t, Eq a) => t -> a -> a -> [a] -> [a] -> [a]
 _replaceElementN _ _ _ [] acc = rev acc
 _replaceElementN 0 _ _ xs acc = rev acc ++ xs
 _replaceElementN n oe ne (x : xs) acc =
-  if x == oe then
-    _replaceElementN (n - 1) oe ne xs (ne : acc)
-  else
-    _replaceElementN n oe ne xs (x : acc)
+  if x == oe
+    then
+      _replaceElementN (n - 1) oe ne xs (ne : acc)
+    else
+      _replaceElementN n oe ne xs (x : acc)
 
 main = do
   -- [1,2,3,3,1]
   -- print (_replaceElementAll 1 4 [3, 1] [3, 2, 4])
-  print (replaceElementN 3 0 4 [1,2,3,3,1])
+  print (removen 4 2 [2, 3, 4, 5, 4, 3, 2, 1, 4, 4, 3])
