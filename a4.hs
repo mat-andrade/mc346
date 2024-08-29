@@ -19,10 +19,17 @@ matmul m1 m2 = matmul' m1 (transpose m2)
     matmul' [] _ = []
     matmul' (l : ls) cs = map (vecprod l) cs : matmul' ls cs
 
+matmul2 :: Num b => [[b]] -> [[b]] -> [[b]]
+matmul2 m1 m2 = matmul2' m1 (transpose m2)
+
+matmul2' :: Num b => [[b]] -> [[b]] -> [[b]]
+matmul2' ls cs = map (\l -> map (vecprod l) cs) ls
+
 main :: IO ()
 main =
   let matriz = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
    in do
         print matriz
         print $ transpose matriz
-        print (matmul matriz matriz)
+        print $ matmul matriz matriz
+        print $ matmul2' matriz (transpose matriz)
