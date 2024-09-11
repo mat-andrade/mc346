@@ -25,6 +25,11 @@ matmul2 m1 m2 = matmul2' m1 (transpose m2)
 matmul2' :: Num b => [[b]] -> [[b]] -> [[b]]
 matmul2' ls cs = map (\l -> map (vecprod l) cs) ls
 
+matmul3 :: Num b => [[b]] -> [[b]] -> [[b]]
+matmul3 m1 m2 = matmul3' m1 (transpose m2)
+  where
+    matmul3' ls cs = map ((`map` cs) . vecprod) ls
+
 main :: IO ()
 main =
   let matriz = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
