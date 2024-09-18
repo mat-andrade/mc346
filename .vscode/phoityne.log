@@ -1,7 +1,0 @@
-2024-09-18 14:55:29.627853100000 [$pid(ThreadId 5)] ERROR APP - user error (<getModule> loaded module can not find from path. <c:\Users\Mateus\mc346\proj4.hs> [])
-2024-09-18 14:55:29.702438600000 [$pid(ThreadId 5)] ERROR APP - start debugging failed. user error (ExecResult not found.) : Left "user error (ExecResult not found.)"
-2024-09-18 14:56:32.662073400000 [$pid(ThreadId 5)] ERROR APP - start debugging failed. user error (ExecResult not found.) : Left "user error (ExecResult not found.)"
-2024-09-18 14:56:32.830658000000 [$pid(ThreadId 5)] ERROR APP - user error (<getModule> loaded module can not find from path. <c:\Users\Mateus\mc346\proj4.hs> [])
-2024-09-18 14:56:41.443317800000 [$pid(ThreadId 5)] ERROR APP - user error (<getModule> loaded module can not find from path. <c:\Users\Mateus\mc346\proj4.hs> [])
-2024-09-18 14:56:41.468721100000 [$pid(ThreadId 5)] ERROR APP - start debugging failed. user error (ExecResult not found.) : Left "user error (ExecResult not found.)"
-2024-09-18 15:03:29.598021000000 [$pid(ThreadId 5)] ERROR APP - user error (<getModule> loaded module can not find from path. <c:\Users\Mateus\mc346\proj4.hs> [])
