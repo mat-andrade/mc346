@@ -20,25 +20,32 @@ buildGraph = foldr insert' Map.empty
         . Map.insertWith (++) v [(u, c)]
 
 dijkstra :: (Ord v, Ord c, Num c) => v -> v -> Map v [(v, c)] -> Maybe c
-dijkstra s t g =
-  let Just edges = Map.lookup s g
-   in dijkstra' (Map.singleton s 0) (Map.fromList edges) 0 s t g
+dijkstra s t g = 
+  do
+    edges <- Map.lookup s g
+    dijkstra' (Map.singleton s 0) Map.empty 0 s t g
   where
-    addToVisit cost neighbors toVisit = foldr (\(v, c) tv -> Map.insert v (cost + c) tv) toVisit neighbors
+    addToVisit cost neighbors toVisit =
+        foldr (\(v, c) tv -> Map.insertWith min v (cost + c) tv) toVisit neighbors
+
     getMin v c Nothing = Just (v, c)
     getMin v c curr@(Just (max_v, max_c)) = if c < max_c then Just (v, c) else curr
 
     dijkstra' visited toVisit cost s t g
-      | s == t = Just cost
+      | s == t    = Just cost
       | otherwise =
         let 
           Just neighbors = Map.lookup s g
-          toVisit' = addToVisit cost (filter (\(k, _) -> isNothing $ Map.lookup k visited) neighbors) toVisit
+          toVisit' = 
+            toVisit
+              |> Map.delete s
+              |> addToVisit cost (filter (\(k, _) -> isNothing $ Map.lookup k visited) neighbors)
         in if Map.null toVisit' then Nothing else
           do
             (next_v, c) <- Map.foldrWithKey getMin Nothing toVisit'
             dijkstra' (Map.insert next_v c visited) toVisit' c next_v t g
 
+main :: IO ()
 main = do
   print $
     dijkstra
