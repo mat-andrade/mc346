@@ -6,8 +6,6 @@ import Data.Foldable (maximumBy)
 import Data.Map (Map)
 import Data.Map.Strict qualified as Map
 import Data.Maybe (isJust, isNothing)
-import Data.Tuple (swap)
-import Distribution.Compat.Graph (neighbors)
 
 (|>) :: t1 -> (t1 -> t2) -> t2
 x |> f = f x
