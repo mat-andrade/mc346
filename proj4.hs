@@ -43,6 +43,15 @@ dijkstra s t g =
             (next_v, c) <- Map.foldrWithKey getMin Nothing toVisit'
             dijkstra' (Map.insert next_v c visited) toVisit' c next_v t g
 
+proj4a :: (Num c, Ord v, Ord c) => [(v, v, c)] -> v -> v -> c
+proj4a g s t = let Just c = proj4b g s t in c
+
+proj4b :: (Num c, Ord v, Ord c) => [(v, v, c)] -> v -> v -> Maybe c
+proj4b g s t = 
+  g
+    |> buildGraph
+    |> dijkstra s t
+
 main :: IO ()
 main = do
   print $
